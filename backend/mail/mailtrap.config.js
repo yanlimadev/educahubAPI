@@ -10,6 +10,6 @@ export const client = new MailtrapClient({
 });
 
 export const sender = {
-  email: 'verify@yanlima.com',
-  name: 'E-mail Verification',
+  email: 'educahub@yanlima.com',
+  name: 'Educahub',
 };

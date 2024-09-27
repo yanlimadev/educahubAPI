@@ -11,10 +11,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-  res.send('OK...');
-});
-
 app.use('/auth', authRoutes);
 
 app.listen(PORT, (err) => {

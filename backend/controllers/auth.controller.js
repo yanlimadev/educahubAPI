@@ -2,7 +2,7 @@ import { User } from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { generateVerificationToken } from '../utils/generateVerificationToken.js';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
-import { sendVerificationEmail } from '../mail/emails.js';
+import { sendVerificationEmail, sendWelcomeEmail } from '../mail/emails.js';
 
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -58,4 +58,36 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   res.send('logout route!');
+};
+
+export const verifyEmail = async (req, res) => {
+  const { verificationCode } = req.body;
+
+  try {
+    const user = await User.findOne({
+      verificationToken: verificationCode,
+      verificationTokenExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      res
+        .status(400)
+        .json({ success: false, message: 'Invalid or expired token' });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+
+    await user.save();
+
+    await sendWelcomeEmail(user.email, user.name);
+
+    res.status(200).json({
+      success: true,
+      message: 'email verified successfully',
+    });
+  } catch (err) {
+    console.log('Verification email error: ', err.message);
+  }
 };

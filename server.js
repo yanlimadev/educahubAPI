@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { connectToDatabase } from './database/connectDB.js';
-import authRoutes from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
+import { connectToDatabase } from './src/database/connectDB.js';
+import authRoutes from './src/routes/auth.route.js';
 
 const app = express();
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use('/auth', authRoutes);
 

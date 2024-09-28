@@ -1,10 +1,12 @@
+import { client, sender } from './mailtrap.config.js';
+
+// Email templates
 import {
   VERIFICATION_EMAIL_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
   PASSWORD_RECOVERY_EMAIL_TEMPLATE,
   PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE,
 } from './emailTemplates.js';
-import { client, sender } from './mailtrap.config.js';
 
 export async function sendVerificationEmail(email, verificationCode) {
   const recipient = [{ email }];

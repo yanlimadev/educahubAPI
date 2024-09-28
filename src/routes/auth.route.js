@@ -287,6 +287,40 @@ authRoutes.post('/verify-email', verifyEmail);
  */
 authRoutes.post('/login', login);
 
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: User logout
+ *     description: Logout the user by deleting the authentication cookie.
+ *     responses:
+ *       200:
+ *         description: Login successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [true]
+ *                 message:
+ *                   type: string
+ *                   enum: ["Logged out successfully."]
+ *       500:
+ *         description: Server error - An error occurred in server processing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later"
+ */
 authRoutes.post('/logout', logout);
 
 authRoutes.post('/forgot-password', forgotPassword);

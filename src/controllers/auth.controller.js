@@ -126,8 +126,19 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie('token');
-  res.status(200).json({ success: true, message: 'Logged out successfully' });
+  try {
+    res.clearCookie('token');
+    res
+      .status(200)
+      .json({ success: true, message: 'Logged out successfully.' });
+  } catch (err) {
+    console.log('Logout error: ', err.message);
+    res.status(500).json({
+      // Internal server error
+      success: false,
+      message: 'An unexpected error occurred. Please try again later',
+    });
+  }
 };
 
 export const verifyEmail = async (req, res) => {

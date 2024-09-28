@@ -22,15 +22,21 @@ export const signup = async (req, res) => {
   try {
     // Throws an error if one of the fields is empty
     if (!name || !email || !password) {
-      throw new Error('All fields required!');
+      return res.status(400).json({
+        // Bad request
+        success: false,
+        message: 'Required fields are missing',
+      });
     }
 
     // Throws an error if there is a user in the database with the same email
     const userAlreadyExists = await User.findOne({ email });
     if (userAlreadyExists) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'User already exists!' });
+      return res.status(409).json({
+        // Conflict
+        success: false,
+        message: 'User already exists!',
+      });
     }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
@@ -53,14 +59,19 @@ export const signup = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'user created successfully',
+      message: 'User created successfully',
       user: {
         ...user._doc,
         password: undefined,
       },
     });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    console.log('Error on signup: ', err.message);
+    res.status(500).json({
+      // Internal server error
+      success: false,
+      message: 'An unexpected error occurred. Please try again later',
+    });
   }
 };
 
@@ -104,6 +115,13 @@ export const logout = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
   const { verificationCode } = req.body;
+  if (!verificationCode) {
+    return res.status(400).json({
+      // Bad request
+      success: false,
+      message: 'Required fields are missing',
+    });
+  }
 
   try {
     const user = await User.findOne({
@@ -112,9 +130,10 @@ export const verifyEmail = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Invalid or expired token' });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification code',
+      });
     }
 
     user.isVerified = true;
@@ -127,7 +146,7 @@ export const verifyEmail = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'email verified successfully',
+      message: 'Email verified successfully',
       user: {
         ...user._doc,
         password: undefined,
@@ -222,6 +241,9 @@ export const checkAuth = async (req, res) => {
     res.status(200).json({ success: true, user });
   } catch (err) {
     console.log('Error in check auth: ', err.message);
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'An unexpected error occurred. Please try again later',
+    });
   }
 };

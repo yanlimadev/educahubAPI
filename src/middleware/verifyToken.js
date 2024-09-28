@@ -5,7 +5,7 @@ export const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'Unauthorized',
+      message: 'Unauthorized - Token is missing',
     });
   }
 
@@ -14,7 +14,7 @@ export const verifyToken = (req, res, next) => {
     if (!decoded) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized - Invalid token',
+        message: 'Unauthorized - Token is invalid',
       });
     }
 
@@ -23,6 +23,11 @@ export const verifyToken = (req, res, next) => {
     next();
   } catch (err) {
     console.log('Error in verify token: ', err.message);
-    return res.status(500).json({ success: false, message: err.message });
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: 'An unexpected error occurred. Please try again later',
+      });
   }
 };

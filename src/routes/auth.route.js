@@ -127,7 +127,7 @@ authRoutes.post('/signup', signup);
  * /verify-email:
  *   post:
  *     summary: Verify the user email
- *     description: Verify the user email address by providing the verification code sent to user's email.
+ *     description: Verify the user email address by providing the verification code sent to user's email and if successful send a welcome email.
  *     requestBody:
  *       required: true
  *       content:
@@ -323,6 +323,66 @@ authRoutes.post('/login', login);
  */
 authRoutes.post('/logout', logout);
 
+/**
+ * @swagger
+ * /forgot-password:
+ *   post:
+ *     summary: Sends a password recovery email to the user.
+ *     description: Generate a recovery token and sends it to the user's email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "johndoe@example.com"
+ *     responses:
+ *       200:
+ *         description: Password reset Link sent.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [true]
+ *                 message:
+ *                   type: string
+ *                   enum: ["Password reset Link sent."]
+ *       400:
+ *         description: Invalid credentials or required fields are missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   enum: ["User not found.", "Required fields are missing."]
+ *       500:
+ *         description: Server error - An error occurred in server processing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later"
+ */
 authRoutes.post('/forgot-password', forgotPassword);
 
 authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);

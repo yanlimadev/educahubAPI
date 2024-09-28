@@ -188,12 +188,20 @@ export const verifyEmail = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      // Bad request
+      success: false,
+      message: 'Required fields are missing',
+    });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: 'User not found' });
+        .json({ success: false, message: 'Invalid credentials' });
     }
 
     const recoveryToken = crypto.randomBytes(20).toString('hex');
@@ -212,11 +220,11 @@ export const forgotPassword = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Password reset Link sent to your email',
+      message: 'User not found.',
     });
   } catch (err) {
     console.log('Error in forgot password: ', err.message);
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 

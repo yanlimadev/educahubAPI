@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      required: true,
+      enum: ['user', 'admin']
+    }
     lastLogin: {
       type: Date,
       default: Date.now,
@@ -23,6 +28,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     resetPasswordToken: String,
     resetPasswordTokenExpiresAt: Date,
     verificationToken: String,

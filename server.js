@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Routers
-app.use(authRoutes);
+app.use('/auth', authRoutes);
 
 // PORT
 dotenv.config();

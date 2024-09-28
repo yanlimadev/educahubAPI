@@ -18,7 +18,7 @@ const authRoutes = express.Router();
 
 /**
  * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
  *     summary: Create a new user account
  *     description: Register a new user by providing their name, email, and password. The password will be hashed before saving the user, and a JWT will be generated and sent as a cookie for authentication. A verification email is sent to user email address.
@@ -124,7 +124,7 @@ authRoutes.post('/signup', signup);
 
 /**
  * @swagger
- * /verify-email:
+ * /auth/verify-email:
  *   post:
  *     summary: Verify the user email
  *     description: Verify the user email address by providing the verification code sent to user's email and if successful send a welcome email.
@@ -203,7 +203,7 @@ authRoutes.post('/verify-email', verifyEmail);
 
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
  *     summary: User login
  *     description: Authenticates a user using email and password. If valid, returns a JWT in a cookie for authentication, and the user information.
@@ -289,7 +289,7 @@ authRoutes.post('/login', login);
 
 /**
  * @swagger
- * /logout:
+ * /auth/logout:
  *   post:
  *     summary: User logout
  *     description: Logout the user by deleting the authentication cookie.
@@ -325,7 +325,7 @@ authRoutes.post('/logout', logout);
 
 /**
  * @swagger
- * /forgot-password:
+ * /auth/forgot-password:
  *   post:
  *     summary: Sends a password recovery email to the user.
  *     description: Generate a recovery token and sends it to the user's email.
@@ -387,7 +387,7 @@ authRoutes.post('/forgot-password', forgotPassword);
 
 /**
  * @swagger
- * /reset-password/{resetPasswordToken}:
+ * /auth/reset-password/{resetPasswordToken}:
  *   post:
  *     summary: Reset user password
  *     description: Reset the user password by providing a valid password recovery token and send a success email.
@@ -458,7 +458,7 @@ authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
 
 /**
  * @swagger
- * /check-auth:
+ * /auth/check-auth:
  *   get:
  *     summary: Check if  the user is authenticated
  *     description: Validates the authentication token in cookies and returns the user information if the token is valid.

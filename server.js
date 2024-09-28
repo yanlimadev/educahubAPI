@@ -1,7 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+
 import { connectToDatabase } from './src/database/connectDB.js';
+
+// Routers
 import authRoutes from './src/routes/auth.route.js';
 
 const app = express();

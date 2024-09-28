@@ -32,7 +32,6 @@ const authRoutes = express.Router();
  *               - name
  *               - email
  *               - password
- *               - role
  *             properties:
  *               name:
  *                 type: string
@@ -45,10 +44,6 @@ const authRoutes = express.Router();
  *                 type: string
  *                 format: password
  *                 example: "securePassword123"
- *               role:
- *                 type: string
- *                 format: userRole
- *                 enum: ['user', 'admin']
  *     responses:
  *       200:
  *         description: User created successfully.
@@ -72,10 +67,6 @@ const authRoutes = express.Router();
  *                     name:
  *                       type: string
  *                       example: "John Doe"
- *                     role:
- *                       type: string
- *                       format: userRole
- *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [false]
@@ -175,10 +166,6 @@ authRoutes.post('/signup', signup);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
- *                     role:
- *                       type: string
- *                       format: userRole
- *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [true]
@@ -264,10 +251,6 @@ authRoutes.post('/verify-email', verifyEmail);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
- *                     role:
- *                       type: string
- *                       format: userRole
- *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [true]
@@ -502,10 +485,7 @@ authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
- *                     role:
- *                       type: string
- *                       format: userRole
- *                       enum: ['user', 'admin']
+
  *                     isVerified:
  *                       type: boolean
  *                       example: true

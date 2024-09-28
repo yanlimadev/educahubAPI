@@ -7,7 +7,6 @@ import { User } from '../models/user.model.js';
 // Utils
 import { generateVerificationToken } from '../utils/generateVerificationToken.js';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
-import userRoles from '../utils/userRoles.js';
 
 // Email send functions
 import {
@@ -18,22 +17,15 @@ import {
 } from '../mail/emails.js';
 
 export const signup = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     // Throws an error if one of the fields is empty
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       return res.status(400).json({
         // Bad request
         success: false,
         message: 'Required fields are missing',
-      });
-    }
-    if (!userRoles.includes(role)) {
-      return res.status(400).json({
-        // Bad request
-        success: false,
-        message: 'Invalid field value.',
       });
     }
 
@@ -54,7 +46,6 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       name,
-      role,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
@@ -85,7 +76,7 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({
       // Bad request

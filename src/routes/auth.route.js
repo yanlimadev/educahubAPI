@@ -89,7 +89,7 @@ const authRoutes = express.Router();
  *               properties:
  *                 success:
  *                   type: boolean
- *                   enum: [true]
+ *                   enum: [false]
  *                 message:
  *                   type: string
  *                   enum: ["Required fields are missing."]
@@ -102,7 +102,7 @@ const authRoutes = express.Router();
  *               properties:
  *                 success:
  *                   type: boolean
- *                   enum: [true]
+ *                   enum: [false]
  *                 message:
  *                   type: string
  *                   enum: ["User already exists."]
@@ -181,7 +181,7 @@ authRoutes.post('/signup', signup);
  *               properties:
  *                 success:
  *                   type: boolean
- *                   enum: [true]
+ *                   enum: [false]
  *                 message:
  *                   type: string
  *                   enum: ["Invalid or expired verification code.", "Required fields are missing."]
@@ -201,6 +201,90 @@ authRoutes.post('/signup', signup);
  */
 authRoutes.post('/verify-email', verifyEmail);
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: User login
+ *     description: Authenticates a user using email and password. If valid, returns a JWT in a cookie for authentication, and the user information.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "johndoe@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: "securePassword123"
+ *     responses:
+ *       200:
+ *         description: Login successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [true]
+ *                 message:
+ *                   type: string
+ *                   enum: ["Login successful."]
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "ad6f72d3d9a94a4cf5410152f"
+ *                     email:
+ *                       type: string
+ *                       example: "johndoe@yanlima.com"
+ *                     name:
+ *                       type: string
+ *                       example: "John Doe"
+ *                     isVerified:
+ *                       type: boolean
+ *                       enum: [true]
+ *                     lastLogin:
+ *                       type: string
+ *                       format: date
+ *                       example: "2024-09-28T10:16:08.866Z"
+ *       400:
+ *         description: Invalid credentials or required fields are missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   enum: ["Invalid or expired verification code.", "Required fields are missing."]
+ *       500:
+ *         description: Server error - An error occurred in server processing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later"
+ */
 authRoutes.post('/login', login);
 
 authRoutes.post('/logout', logout);

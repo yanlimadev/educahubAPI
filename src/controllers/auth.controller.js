@@ -77,19 +77,31 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({
+      // Bad request
+      success: false,
+      message: 'Required fields are missing',
+    });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Invalid credentials' });
+      return res.status(400).json({
+        // Bad request
+        success: false,
+        message: 'Invalid credentials',
+      });
     }
 
     const isValidPassword = await bcryptjs.compare(password, user.password);
     if (!isValidPassword) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Invalid credentials' });
+      return res.status(400).json({
+        // Bad request
+        success: false,
+        message: 'Invalid credentials',
+      });
     }
 
     generateTokenAndSetCookie(res, user._id);
@@ -98,13 +110,18 @@ export const login = async (req, res) => {
     await user.save();
 
     res.status(200).json({
+      // Success
       success: true,
-      message: 'Logged successfully',
+      message: 'Login successful.',
       user: { ...user._doc, password: undefined },
     });
   } catch (err) {
     console.log('Login error: ', err.message);
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({
+      // Internal server error
+      success: false,
+      message: 'An unexpected error occurred. Please try again later',
+    });
   }
 };
 

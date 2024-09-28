@@ -32,6 +32,7 @@ const authRoutes = express.Router();
  *               - name
  *               - email
  *               - password
+ *               - role
  *             properties:
  *               name:
  *                 type: string
@@ -44,6 +45,10 @@ const authRoutes = express.Router();
  *                 type: string
  *                 format: password
  *                 example: "securePassword123"
+ *               role:
+ *                 type: string
+ *                 format: userRole
+ *                 enum: ['user', 'admin']
  *     responses:
  *       200:
  *         description: User created successfully.
@@ -67,6 +72,10 @@ const authRoutes = express.Router();
  *                     name:
  *                       type: string
  *                       example: "John Doe"
+ *                     role:
+ *                       type: string
+ *                       format: userRole
+ *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [false]
@@ -166,6 +175,10 @@ authRoutes.post('/signup', signup);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
+ *                     role:
+ *                       type: string
+ *                       format: userRole
+ *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [true]
@@ -251,6 +264,10 @@ authRoutes.post('/verify-email', verifyEmail);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
+ *                     role:
+ *                       type: string
+ *                       format: userRole
+ *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       enum: [true]
@@ -259,7 +276,7 @@ authRoutes.post('/verify-email', verifyEmail);
  *                       format: date
  *                       example: "2024-09-28T10:16:08.866Z"
  *       400:
- *         description: Invalid credentials or required fields are missing.
+ *         description: Invalid credentials or required fields are missing or have wrong value.
  *         content:
  *           application/json:
  *             schema:
@@ -270,7 +287,7 @@ authRoutes.post('/verify-email', verifyEmail);
  *                   enum: [false]
  *                 message:
  *                   type: string
- *                   enum: ["Invalid or expired verification code.", "Required fields are missing."]
+ *                   enum: ["Invalid or expired verification code.", "Required fields are missing.", "Invalid field value."]
  *       500:
  *         description: Internal server error.
  *         content:
@@ -485,6 +502,10 @@ authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
  *                     name:
  *                       type: string
  *                       example: "John Doe"
+ *                     role:
+ *                       type: string
+ *                       format: userRole
+ *                       enum: ['user', 'admin']
  *                     isVerified:
  *                       type: boolean
  *                       example: true

@@ -107,7 +107,7 @@ const authRoutes = express.Router();
  *                   type: string
  *                   enum: ["User already exists."]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
@@ -186,7 +186,7 @@ authRoutes.post('/signup', signup);
  *                   type: string
  *                   enum: ["Invalid or expired verification code.", "Required fields are missing."]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
@@ -272,7 +272,7 @@ authRoutes.post('/verify-email', verifyEmail);
  *                   type: string
  *                   enum: ["Invalid or expired verification code.", "Required fields are missing."]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
@@ -308,7 +308,7 @@ authRoutes.post('/login', login);
  *                   type: string
  *                   enum: ["Logged out successfully."]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
@@ -370,7 +370,7 @@ authRoutes.post('/logout', logout);
  *                   type: string
  *                   enum: ["User not found.", "Required fields are missing."]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
@@ -385,6 +385,75 @@ authRoutes.post('/logout', logout);
  */
 authRoutes.post('/forgot-password', forgotPassword);
 
+/**
+ * @swagger
+ * /reset-password/{resetPasswordToken}:
+ *   post:
+ *     summary: Reset user password
+ *     description: Reset the user password by providing a valid password recovery token and send a success email.
+ *     parameters:
+ *       - in: path
+ *         name: resetPasswordToken
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token sent to the user's email for password reset.
+ *         example: "12345abcde"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: The new password to set.
+ *                 example: "newSecurePassword123"
+ *     responses:
+ *       200:
+ *         description: Password reset successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [true]
+ *                 message:
+ *                   type: string
+ *                   example: "Password has been reset successfully."
+ *       400:
+ *         description: Invalid or expired token, or required fields missing.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   enum: ["Invalid or expired reset token.", "required fields are missing"]
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   enum: [false]
+ *                 message:
+ *                   type: string
+ *                   example: "An unexpected error occurred. Please try again later."
+ */
 authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
 
 /**
@@ -436,7 +505,7 @@ authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
  *                   type: string
  *                   enum: ["Unauthorized - The token is missing", "Unauthorized - The token is invalid"]
  *       500:
- *         description: Server error - An error occurred in server processing.
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:

@@ -231,6 +231,13 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   const { resetPasswordToken } = req.params;
   const { password } = req.body;
+  if (!password) {
+    return res.status(400).json({
+      // Bad request
+      success: false,
+      message: 'Required fields are missing',
+    });
+  }
 
   try {
     const user = await User.findOne({
@@ -257,7 +264,7 @@ export const resetPassword = async (req, res) => {
 
     res
       .status(200)
-      .json({ success: true, message: 'Password reset successfully' });
+      .json({ success: true, message: 'Password has been reset successfully' });
   } catch (err) {
     console.log('Reset password error: ', err.message);
     res.status(400).json({ success: false, message: err.message });

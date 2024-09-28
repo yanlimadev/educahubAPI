@@ -2,6 +2,7 @@ import {
   VERIFICATION_EMAIL_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
   PASSWORD_RECOVERY_EMAIL_TEMPLATE,
+  PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE,
 } from './emailTemplates.js';
 import { client, sender } from './mailtrap.config.js';
 
@@ -48,7 +49,7 @@ export async function sendPasswordRecoveryEmail(email, username, resetURL) {
       from: sender,
       to: recipient,
       subject: 'Password reset request',
-      category: 'Recovery Password',
+      category: 'Password Recovery',
       html: PASSWORD_RECOVERY_EMAIL_TEMPLATE.replace(
         '{username}',
         username,
@@ -56,5 +57,24 @@ export async function sendPasswordRecoveryEmail(email, username, resetURL) {
     });
   } catch (err) {
     console.log('Send password recovery email error: ', err.message);
+  }
+}
+
+export async function sendPasswordResetSuccessEmail(email, username) {
+  const recipient = [{ email }];
+
+  try {
+    client.send({
+      from: sender,
+      to: recipient,
+      subject: 'Password reset successfully',
+      category: 'Password recovery',
+      html: PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE.replace(
+        '{username}',
+        username,
+      ),
+    });
+  } catch (err) {
+    console.log('Send welcome email error: ', err.message);
   }
 }

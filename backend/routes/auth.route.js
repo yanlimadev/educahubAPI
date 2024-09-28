@@ -5,6 +5,7 @@ import {
   logout,
   signup,
   verifyEmail,
+  resetPassword,
 } from '../controllers/auth.controller.js';
 
 const authRoutes = express.Router();
@@ -18,5 +19,7 @@ authRoutes.post('/logout', logout);
 authRoutes.post('/verify-email', verifyEmail);
 
 authRoutes.post('/forgot-password', forgotPassword);
+
+authRoutes.post('/reset-password/:resetPasswordToken', resetPassword);
 
 export default authRoutes;

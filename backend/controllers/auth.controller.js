@@ -7,6 +7,7 @@ import {
   sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordRecoveryEmail,
+  sendPasswordResetSuccessEmail,
 } from '../mail/emails.js';
 
 export const signup = async (req, res) => {
@@ -163,5 +164,41 @@ export const forgotPassword = async (req, res) => {
   } catch (err) {
     console.log('Error in forgot password: ', err.message);
     res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordTokenExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Invalid or expired reset token' });
+    }
+
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpiresAt = undefined;
+    user.password = hashedPassword;
+
+    await user.save();
+
+    // TODO: Send reset success email
+    sendPasswordResetSuccessEmail(user.email, user.name);
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Password reset successfully' });
+  } catch (err) {
+    console.log('Reset password error: ', err.message);
+    res.status(400).json({ success: false, message: err.message });
   }
 };

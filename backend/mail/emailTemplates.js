@@ -1,4 +1,5 @@
-export const VERIFICATION_EMAIL_TEMPLATE = `<!DOCTYPE html>
+export const VERIFICATION_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
     <html>
       <head>
         <style>
@@ -77,7 +78,8 @@ export const VERIFICATION_EMAIL_TEMPLATE = `<!DOCTYPE html>
           </div>
         </div>
       </body>
-    </html>`;
+    </html>
+`;
 
 export const WELCOME_EMAIL_TEMPLATE = `
   <!DOCTYPE html>
@@ -116,7 +118,8 @@ export const WELCOME_EMAIL_TEMPLATE = `
     </div>
   </div>
 </body>
-</html>`;
+</html>
+`;
 
 export const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
   <!DOCTYPE html>
@@ -144,9 +147,9 @@ export const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
       <p>We received a request to reset your password for your EducaHub account.</p>
       <p>If you didn't make this request, you can ignore this email. Otherwise, click the button below to reset your password:</p>
       <div class="cta">
-        <a href="{resetLink}" target="_blank">Reset Password</a>
+        <a href="{resetURL}" target="_blank">Reset Password</a>
       </div>
-      <p>This link will expire in 24 hours.</p>
+      <p>This link will expire in 1 hour.</p>
     </div>
     <div class="footer">
       <p>&copy; 2024 EducaHub. All rights reserved.</p>
@@ -155,4 +158,45 @@ export const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
   </div>
 </body>
 </html>
+`;
+
+export const PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    .header { background-color: #4CAF50; color: white; padding: 10px; text-align: center; border-radius: 10px 10px 0 0; }
+    .content { margin: 20px 20px; }
+    .footer { background-color: #ddd; color: #333; padding: 10px; text-align: center; border-radius: 0 0 10px 10px; }
+    .success-title { font-size: 24px; color: #4CAF50; }
+    .highlight { color: #4CAF50; font-weight: bold; }
+    .cta { text-align: center; margin: 20px 0; }
+    .cta a { background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px; display: inline-block; }
+    .cta a:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Password Reset Successful</h1>
+    </div>
+    <div class="content">
+      <p class="success-title">Hello <span class="highlight">{username}</span>,</p>
+      <p>Your password has been successfully reset.</p>
+      <p>If you didn't request this change or believe it's unauthorized, please contact our support team immediately.</p>
+      <div class="cta">
+        <a href="[SupportLink]" target="_blank">Contact Support</a>
+      </div>
+      <p>Thank you for using <strong>EducaHub</strong>.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2024 EducaHub. All rights reserved.</p>
+      <p><a href="#">Unsubscribe</a> | <a href="#">Contact Us</a></p>
+    </div>
+  </div>
+</body>
+</html>
+
 `;

@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({
         // Bad request
         success: false,
-        message: 'Required fields are missing',
+        message: 'Required fields are missing.',
       });
     }
 
@@ -35,7 +35,7 @@ export const signup = async (req, res) => {
       return res.status(409).json({
         // Conflict
         success: false,
-        message: 'User already exists!',
+        message: 'User already exists.',
       });
     }
 
@@ -81,7 +81,7 @@ export const login = async (req, res) => {
     return res.status(400).json({
       // Bad request
       success: false,
-      message: 'Required fields are missing',
+      message: 'Required fields are missing.',
     });
   }
 
@@ -91,16 +91,16 @@ export const login = async (req, res) => {
       return res.status(400).json({
         // Bad request
         success: false,
-        message: 'Invalid credentials',
+        message: 'Invalid credentials.',
       });
     }
 
     const isValidPassword = await bcryptjs.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(400).json({
-        // Bad request
+      return res.status(401).json({
+        // Unauthorized
         success: false,
-        message: 'Invalid credentials',
+        message: 'Invalid credentials.',
       });
     }
 
@@ -120,7 +120,7 @@ export const login = async (req, res) => {
     res.status(500).json({
       // Internal server error
       success: false,
-      message: 'An unexpected error occurred. Please try again later',
+      message: 'An unexpected error occurred. Please try again later.',
     });
   }
 };
@@ -147,7 +147,7 @@ export const verifyEmail = async (req, res) => {
     return res.status(400).json({
       // Bad request
       success: false,
-      message: 'Required fields are missing',
+      message: 'Required fields are missing.',
     });
   }
 
@@ -160,7 +160,7 @@ export const verifyEmail = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid or expired verification code',
+        message: 'Invalid credentials or expired verification code.',
       });
     }
 
@@ -174,7 +174,7 @@ export const verifyEmail = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Email verified successfully',
+      message: 'Email verified successfully.',
       user: {
         ...user._doc,
         password: undefined,
@@ -192,7 +192,7 @@ export const forgotPassword = async (req, res) => {
     return res.status(400).json({
       // Bad request
       success: false,
-      message: 'Required fields are missing',
+      message: 'Required fields are missing.',
     });
   }
 
@@ -201,7 +201,7 @@ export const forgotPassword = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: 'Invalid credentials' });
+        .json({ success: false, message: 'Invalid credentials.' });
     }
 
     const recoveryToken = crypto.randomBytes(20).toString('hex');
@@ -220,7 +220,7 @@ export const forgotPassword = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'User not found.',
+      message: 'Password reset Link sent.',
     });
   } catch (err) {
     console.log('Error in forgot password: ', err.message);
@@ -235,7 +235,7 @@ export const resetPassword = async (req, res) => {
     return res.status(400).json({
       // Bad request
       success: false,
-      message: 'Required fields are missing',
+      message: 'Required fields are missing.',
     });
   }
 
@@ -248,7 +248,7 @@ export const resetPassword = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: 'Invalid or expired reset token' });
+        .json({ success: false, message: 'Invalid or expired reset token.' });
     }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
@@ -262,9 +262,10 @@ export const resetPassword = async (req, res) => {
     // TODO: Send reset success email
     sendPasswordResetSuccessEmail(user.email, user.name);
 
-    res
-      .status(200)
-      .json({ success: true, message: 'Password has been reset successfully' });
+    res.status(200).json({
+      success: true,
+      message: 'Password has been reset successfully.',
+    });
   } catch (err) {
     console.log('Reset password error: ', err.message);
     res.status(400).json({ success: false, message: err.message });

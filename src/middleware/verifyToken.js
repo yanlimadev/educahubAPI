@@ -10,7 +10,14 @@ export const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      decoded = undefined;
+    }
+
     if (!decoded) {
       return res.status(401).json({
         success: false,
@@ -22,12 +29,10 @@ export const verifyToken = (req, res, next) => {
 
     next();
   } catch (err) {
-    console.log('Error in verify token: ', err.message);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: 'An unexpected error occurred. Please try again later',
-      });
+    console.log('Error in verify token: ', err);
+    return res.status(500).json({
+      success: false,
+      message: 'An unexpected error occurred. Please try again later',
+    });
   }
 };

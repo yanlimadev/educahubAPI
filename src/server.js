@@ -6,10 +6,10 @@ import cookieParser from 'cookie-parser';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-import { connectToDatabase } from './src/database/connectDB.js';
+import { connectToDatabase } from './database/connectDB.js';
 
 // Routers
-import authRoutes from './src/routes/auth.route.js';
+import authRoutes from './routes/auth.route.js';
 
 const app = express();
 
@@ -49,7 +49,11 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (err) => {
-  connectToDatabase();
-  console.log(`Server is running on port ${PORT}...`);
-  console.log(`http://localhost:${PORT}`);
+  if (!(process.env.NODE_ENV === 'test')) {
+    connectToDatabase();
+    console.log(`Server is running on port ${PORT}...`);
+    console.log(`http://localhost:${PORT}`);
+  }
 });
+
+export default app;

@@ -136,10 +136,15 @@ authRoutes.post('/signup', signup);
  *             type: object
  *             required:
  *               - verificationCode
+ *               - email
  *             properties:
  *               verificationCode:
  *                 type: string
  *                 example: "123456"
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *                 format: email
  *     responses:
  *       200:
  *         description: Email verified successfully.

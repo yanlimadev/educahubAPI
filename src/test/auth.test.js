@@ -2,7 +2,7 @@ import request from 'supertest';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import app from '../server.js';
+import app from '../app.js';
 import { connect, close } from '../mock/mockConnect.js';
 import { User } from '../models/user.model.js';
 

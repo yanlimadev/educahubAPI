@@ -1,14 +1,13 @@
-import { client, sender } from './mailtrap.config.js';
-
-// Email templates
-import {
+const {
   VERIFICATION_EMAIL_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
   PASSWORD_RECOVERY_EMAIL_TEMPLATE,
   PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE,
-} from './emailTemplates.js';
+} = require('../mail/mailtrap.templates.js');
 
-export async function sendVerificationEmail(email, verificationCode) {
+const { client, sender } = require('../mail/mailtrap.config.js');
+
+const sendVerificationEmailService = async (email, verificationCode) => {
   const recipient = [{ email }];
 
   try {
@@ -19,15 +18,15 @@ export async function sendVerificationEmail(email, verificationCode) {
       category: 'Email Verification',
       html: VERIFICATION_EMAIL_TEMPLATE.replace(
         '{verificationCode}',
-        verificationCode,
+        verificationCode
       ),
     });
-  } catch (err) {
-    console.log('Send verification email error: ', err.message);
+  } catch (error) {
+    console.log('Send verification email error: ', error);
   }
-}
+};
 
-export async function sendWelcomeEmail(email, Username) {
+const sendWelcomeEmailService = (email, Username) => {
   const recipient = [{ email }];
 
   try {
@@ -38,12 +37,12 @@ export async function sendWelcomeEmail(email, Username) {
       category: 'Welcome',
       html: WELCOME_EMAIL_TEMPLATE.replace('{Username}', Username),
     });
-  } catch (err) {
-    console.log('Send welcome email error: ', err.message);
+  } catch (error) {
+    console.log('Send welcome email error: ', error);
   }
-}
+};
 
-export async function sendPasswordRecoveryEmail(email, username, resetURL) {
+const sendPasswordRecoveryEmailService = (email, username, resetURL) => {
   const recipient = [{ email }];
 
   try {
@@ -54,15 +53,15 @@ export async function sendPasswordRecoveryEmail(email, username, resetURL) {
       category: 'Password Recovery',
       html: PASSWORD_RECOVERY_EMAIL_TEMPLATE.replace(
         '{username}',
-        username,
+        username
       ).replace('{resetURL}', resetURL),
     });
-  } catch (err) {
-    console.log('Send password recovery email error: ', err.message);
+  } catch (error) {
+    console.log('Send password recovery email error: ', error);
   }
-}
+};
 
-export async function sendPasswordResetSuccessEmail(email, username) {
+const sendPasswordResetSuccessEmailService = (email, username) => {
   const recipient = [{ email }];
 
   try {
@@ -73,10 +72,17 @@ export async function sendPasswordResetSuccessEmail(email, username) {
       category: 'Password recovery',
       html: PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE.replace(
         '{username}',
-        username,
+        username
       ),
     });
-  } catch (err) {
-    console.log('Send welcome email error: ', err.message);
+  } catch (error) {
+    console.log('Send welcome email error: ', error);
   }
-}
+};
+
+module.exports = {
+  sendVerificationEmailService,
+  sendWelcomeEmailService,
+  sendPasswordRecoveryEmailService,
+  sendPasswordResetSuccessEmailService,
+};

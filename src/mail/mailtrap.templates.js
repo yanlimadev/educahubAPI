@@ -1,4 +1,4 @@
-export const VERIFICATION_EMAIL_TEMPLATE = `
+const VERIFICATION_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
     <html>
       <head>
@@ -81,7 +81,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
     </html>
 `;
 
-export const WELCOME_EMAIL_TEMPLATE = `
+const WELCOME_EMAIL_TEMPLATE = `
   <!DOCTYPE html>
 <html>
 <head>
@@ -121,7 +121,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
 </html>
 `;
 
-export const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
+const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
   <!DOCTYPE html>
 <html>
 <head>
@@ -160,7 +160,7 @@ export const PASSWORD_RECOVERY_EMAIL_TEMPLATE = `
 </html>
 `;
 
-export const PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE = `
+const PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -200,3 +200,10 @@ export const PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE = `
 </html>
 
 `;
+
+module.exports = {
+  VERIFICATION_EMAIL_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE,
+  PASSWORD_RECOVERY_EMAIL_TEMPLATE,
+  PASSWORD_RECOVERY_SUCCESS_EMAIL_TEMPLATE,
+};

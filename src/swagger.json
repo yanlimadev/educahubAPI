@@ -1,0 +1,675 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Educahub API",
+    "version": "1.0.0",
+    "description": "API developed by yan lima for his personal project called EducaHub.",
+    "termsOfService": "https://www.educahub.com/terms",
+    "contact": {
+      "name": "EducaHub Support",
+      "email": "support@educahub.com",
+      "url": "https://www.educahub.com/support"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development"
+    },
+    {
+      "url": "http://api.yanlima.com",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "User Signup",
+        "tags": ["User Management"],
+        "description": "Registers a new user by creating an account with provided credentials. This endpoint allows new users to create an account by providing their name, email, and password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "SecurePassword.231"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User account created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["User account created successfully."]
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "isVerified": {
+                          "type": "boolean",
+                          "enum": [false]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400Error",
+            "description": "Bad Request. Required fields are missing or invalid."
+          },
+          "409": {
+            "description": "Conflict. The resource already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["User already exists."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Authenticates a user and provides a authentication cookie for subsequent requests.",
+        "tags": ["User Management"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "SecurePassword.231"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Logged successfully."]
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "isVerified": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400Error",
+            "description": "Bad Request. Required fields are missing or invalid."
+          },
+          "401": {
+            "description": "Wrong email or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["User not found.", "Invalid credentials."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "User Logout",
+        "description": "Invalidates the user's authentication cookie, logging them out of the system.",
+        "tags": ["User Management"],
+        "responses": {
+          "200": {
+            "description": "Logout succesfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Logout succesfully."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/auth/check-auth": {
+      "get": {
+        "summary": "Check Authentication Status",
+        "description": "Verifies the current authentication status of the user based on the provided authentication cookie.",
+        "tags": ["User Management"],
+        "responses": {
+          "200": {
+            "description": "Authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Authenticated."]
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "isVerified": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Invalid or missing authentication token."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/verify/email": {
+      "post": {
+        "summary": "Email verification",
+        "description": "Verifies the user's email address using a verification token sent via email.",
+        "tags": ["Email Verification"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "verificationCode": {
+                    "type": "string",
+                    "example": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verified Successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Verified Successfully."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400Error"
+          },
+          "401": {
+            "description": "Invalid or expired verification code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Invalid or expired verification code."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/recovery/password": {
+      "summary": "Password recovery request",
+      "description": "Initiates the password recovery process by sending a recovery email to the user.",
+      "post": {
+        "tags": ["Password Recovery"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The recovery password email is sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Logout successfully."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400Error",
+            "description": "Bad Request. Required fields are missing or invalid."
+          },
+          "401": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["User not found."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    },
+    "/recovery/password/:{verificationCode}": {
+      "post": {
+        "summary": "Reset password",
+        "description": "Resets the user's password using a valid recovery token provided in the URL.",
+        "parameters": [
+          {
+            "name": "verificationCode",
+            "in": "path",
+            "required": true,
+            "description": "Valid recovery token for password reset.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": ["Password Recovery"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "1234321"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Password reset successfully."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400Error",
+            "description": "Bad Request. Required fields are missing or invalid."
+          },
+          "401": {
+            "description": "Invalid recovery code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [false]
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": ["Invalid recovery code."]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "400Error": {
+        "description": "Required fieldings are missing.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "enum": [false]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": ["Required fields are missing."]
+                }
+              }
+            }
+          }
+        }
+      },
+      "500Error": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "enum": [false]
+                },
+                "message": {
+                  "type": "string",
+                  "enum": ["Internal server error."]
+                }
+              }
+            }
+          }
+        }
+      },
+      "401Error": {
+        "description": "Unauthorized. The request requires user authentication.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "enum": [false]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized access."
+                }
+              }
+            }
+          }
+        }
+      },
+      "404Error": {
+        "description": "Resource not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "enum": [false]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Resource not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "429Error": {
+        "description": "Too Many Requests. You have hit the rate limit.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "enum": [false]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Too many requests. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

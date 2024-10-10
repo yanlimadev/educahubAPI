@@ -4,7 +4,7 @@ const app = require('../app.js');
 const { connect, close } = require('../database/connectMock.js');
 const User = require('../models/user.model.js');
 
-require('dotenv/config');
+require('dotenv').config();
 
 process.env.NODE_ENV = 'test';
 

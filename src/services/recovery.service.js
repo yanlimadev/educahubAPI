@@ -10,7 +10,7 @@ const {
   sendPasswordResetSuccessEmailService,
 } = require('./mail.service');
 
-require('dotenv/config');
+require('dotenv').config();
 
 const recoveryPasswordService = async (email) => {
   if (!email) {

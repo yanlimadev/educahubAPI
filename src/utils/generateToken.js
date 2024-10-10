@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv/config');
+require('dotenv').config();
 
 const generateToken = async (userId) => {
   const JWT_KEY = process.env.JWT_SECRET;

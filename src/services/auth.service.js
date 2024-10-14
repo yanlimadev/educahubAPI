@@ -47,7 +47,7 @@ const loginService = async (email, password) => {
 
   const hashedPassword = user.password;
 
-  const isMatch = await bcrypt.compare(passwords, hashedPassword);
+  const isMatch = await bcrypt.compare(password, hashedPassword);
   if (!isMatch) {
     const error = new Error('Invalid credentials.');
     error.status = 401;

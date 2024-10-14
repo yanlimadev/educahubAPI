@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 require('dotenv').config();
 
 // Routers
@@ -12,6 +13,8 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 const app = express();
+
+app.use(cors());
 
 // Middlewares
 app.use(express.json());

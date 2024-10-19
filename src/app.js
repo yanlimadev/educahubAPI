@@ -14,8 +14,12 @@ const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
-app.use(cors());
-app.options('*', cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 // Middlewares
 app.use(express.json());

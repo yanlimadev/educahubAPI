@@ -14,7 +14,8 @@ const sendResponse = (res) => {
       const token = await generateToken(userId);
       res.cookie('authToken', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
+        sameSite: 'None',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
     },

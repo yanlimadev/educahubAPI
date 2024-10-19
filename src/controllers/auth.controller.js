@@ -5,6 +5,7 @@ const {
 } = require('../services/auth.service.js');
 const logger = require('../logger');
 const sendResponse = require('../utils/sendResponse.js');
+const cookieConfig = require('../utils/cookieConfig.js');
 
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -38,7 +39,7 @@ const logout = async (req, res) => {
   const { sendSuccess, sendError } = sendResponse(res);
 
   try {
-    res.clearCookie('authToken');
+    res.clearCookie('authToken', cookieConfig);
     return sendSuccess(200, 'Logout successfully.');
   } catch (error) {
     logger.error(error);

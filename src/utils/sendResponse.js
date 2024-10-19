@@ -1,3 +1,4 @@
+const cookieConfig = require('./cookieConfig.js');
 const generateToken = require('./generateToken.js');
 
 const sendResponse = (res) => {
@@ -12,11 +13,7 @@ const sendResponse = (res) => {
     },
     sendCookie: async (userId) => {
       const token = await generateToken(userId);
-      res.cookie('authToken', token, {
-        secure: true,
-        sameSite: 'None',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+      res.cookie('authToken', token, cookieConfig);
     },
   };
 };
